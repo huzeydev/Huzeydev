@@ -149,7 +149,18 @@
         flex-direction: column;
         text-align: center;
       }
-    }
+    } 
+    .project-card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.2);
+}
+
   </style>
 </head>
 <body>
@@ -242,5 +253,6 @@
   <script>AOS.init();</script>
 </body>
 </html>
+
 
 
