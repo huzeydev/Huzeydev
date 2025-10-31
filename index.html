@@ -10,256 +10,200 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 
   <style>
-    /* === BASIC STYLE === */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    body {
-      background: #0f172a;
-      color: #cbd5e1;
-      line-height: 1.6;
-    }
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      margin: auto;
-    }
+    * {margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    body {background:#0f172a;color:#cbd5e1;line-height:1.6;}
+    .container {width:90%;max-width:1000px;margin:auto;}
 
-    /* === NAVBAR === */
     .navbar {
-      width: 100%;
-      background: #0f172a;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-      padding: 15px 0;
+      width:100%;
+      background:#0f172a;
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:1000;
+      padding:15px 0;
+      border-bottom:1px solid #1e293b;
     }
     .navbar .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
-    .navbar .logo {
-      color: #38bdf8;
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-    .navbar ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .navbar ul li a:hover {
-      color: #38bdf8;
-    }
+    .navbar .logo {color:#38bdf8;font-size:1.5rem;font-weight:600;text-decoration:none;cursor:pointer;}
+    .navbar ul {list-style:none;display:flex;gap:20px;}
+    .navbar ul li a {color:#fff;text-decoration:none;font-weight:500;cursor:pointer;}
+    .navbar ul li a:hover,.navbar ul li a.active {color:#38bdf8;}
 
-    /* === SECTIONS === */
-    section {
-      padding: 100px 0;
-    }
-    h1, h2, h3 {
-      color: #38bdf8;
-      margin-bottom: 20px;
-    }
+    .page {display:none;padding-top:100px;animation:fadeIn .4s ease;}
+    .page.active {display:block;}
 
-    /* === HERO === */
-    .hero-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 40px;
-      padding-top: 80px;
-    }
-    .hero-text {
-      flex: 1;
-    }
-    .hero-text h1 {
-      font-size: 2.8rem;
-      margin-bottom: 10px;
-    }
+    h1,h2,h3 {color:#38bdf8;margin-bottom:20px;}
+
+    .hero-flex {display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .hero-text {flex:1;}
+    .hero-text h1 {font-size:2.8rem;margin-bottom:10px;}
     .hero-photo img {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      border: 4px solid #38bdf8;
-      object-fit: cover;
+      width:200px;height:200px;border-radius:50%;border:4px solid #38bdf8;object-fit:cover;
     }
     .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
-      background: #38bdf8;
-      color: #0f172a;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 6px;
+      display:inline-block;margin-top:20px;padding:12px 24px;background:#38bdf8;color:#0f172a;
+      font-weight:600;text-decoration:none;border-radius:6px;cursor:pointer;
     }
-    .btn:hover {
-      background: #0284c7;
-    }
+    .btn:hover {background:#0284c7;}
 
-    /* === ABOUT SECTION === */
-    .about-flex {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      margin-top: 30px;
-    }
+    .about-flex {display:flex;align-items:center;gap:40px;margin-top:30px;}
     .about-photo img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      border: 4px solid #38bdf8;
-      object-fit: cover;
+      width:150px;height:150px;border-radius:50%;border:4px solid #38bdf8;object-fit:cover;
     }
-    .about-text {
-      flex: 1;
-    }
+    .about-text {flex:1;}
 
-    /* === PROJECTS SECTION === */
     .project-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
     }
     .project-card {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 8px;
+      background:#1e293b;padding:20px;border-radius:8px;
+      transition:transform .3s ease,box-shadow .3s ease;
+    }
+    .project-card:hover {
+      transform:translateY(-5px);
+      box-shadow:0 8px 20px rgba(56,189,248,0.2);
     }
 
-    /* === CONTACT SECTION === */
-    .contact-box {
-      text-align: center;
+    .contact-box {text-align:center;}
+
+    @media(max-width:768px){
+      .hero-flex,.about-flex{flex-direction:column;text-align:center;}
     }
 
-    /* === RESPONSIVE === */
-    @media(max-width: 768px) {
-      .hero-flex, .about-flex {
-        flex-direction: column;
-        text-align: center;
-      }
-    } 
-    .project-card {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.2);
-}
-
+    @keyframes fadeIn {
+      from{opacity:0;transform:translateY(10px);}
+      to{opacity:1;transform:translateY(0);}
+    }
   </style>
 </head>
 <body>
-
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="container">
-      <a href="#home" class="logo">HuzeyDev</a>
+      <a class="logo" onclick="navigate('home')">HuzeyDev</a>
       <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a id="link-home" onclick="navigate('home')" class="active">Home</a></li>
+        <li><a id="link-about" onclick="navigate('about')">About</a></li>
+        <li><a id="link-projects" onclick="navigate('projects')">Projects</a></li>
+        <li><a id="link-contact" onclick="navigate('contact')">Contact</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- HOME SECTION -->
-  <section id="home" class="container hero-flex" data-aos="fade-up">
-    <div class="hero-text">
-      <h1>Huzeyfa (Huzeydev)</h1>
-      <p>Web Developer | Freelancer | Builder of Huzagram</p>
-      <p>I build modern websites & apps to help businesses grow online.</p>
-      <a href="#contact" class="btn">Hire Me</a>
-    </div>
-    <div class="hero-photo">
-    </div>
-  </section>
-
-  <!-- ABOUT SECTION -->
-  <section id="about" class="container" data-aos="fade-up">
-    <h2>About Me</h2>
-    <div class="about-flex">
-      <div class="about-photo">
-        <img src="profile.jpg" alt="Huzeyfa">
+  <!-- === HOME PAGE === -->
+  <div id="page-home" class="page active">
+    <section class="container hero-flex">
+      <div class="hero-text">
+        <h1>Huzeyfa (HuzeyDev)</h1>
+        <p>Web Developer | Freelancer | Builder of Huzagram</p>
+        <p>I build modern websites & apps to help businesses grow online.</p>
+        <a class="btn" onclick="navigate('contact')">Hire Me</a>
       </div>
-      <div class="about-text">
-        <h3>My Story</h3>
-        <p>I’m Huzeyfa, also known as HuzeyDev, a passionate young web developer and future tech entrepreneur from Bahir Dar, Ethiopia.</p>
-        <p>My journey started with curiosity and a big dream – to create apps and platforms that truly help people. I began by learning HTML, CSS, and JavaScript, then moved on to bigger projects.</p>
-        <p>One of my main projects is Huzagram, a future platform aiming to become one of the most powerful apps in Africa and beyond. I believe in working hard, learning every day, and creating real solutions that change lives.</p>
+      <div class="hero-photo">
+        <!-- optional photo -->
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-
-  <!-- PROJECTS SECTION -->
-  <section id="projects" class="container" data-aos="fade-up">
-    <h2>Projects</h2>
-    <div class="project-grid">
-      
-      <!-- Huzagram -->
-      <div class="project-card">
-        <img src="IMG_0162.jpeg" alt="Huzagram App" style="width:100%; border-radius:6px; margin-bottom:10px;">
-        <h3>Huzagram</h3>
-        <p><strong>Everything App – Social + Business + AI</strong></p>
-        <p>Huzagram is my dream project — a next-gen “everything app” inspired by WeChat but built with AI at its core. It’s designed to connect people, empower creators, and provide smart business tools for Africa and beyond. A place to chat, create, earn, and grow — all in one app.</p>
+  <!-- === ABOUT PAGE === -->
+  <div id="page-about" class="page">
+    <section class="container">
+      <h2>About Me</h2>
+      <div class="about-flex">
+        <div class="about-photo">
+          <img src="profile.jpg" alt="Huzeyfa">
+        </div>
+        <div class="about-text">
+          <h3>My Story</h3>
+          <p>I’m Huzeyfa, also known as HuzeyDev, a passionate young web developer and future tech entrepreneur from Bahir Dar, Ethiopia.</p>
+          <p>My journey started with curiosity and a big dream – to create apps and platforms that truly help people. I began by learning HTML, CSS, and JavaScript, then moved on to bigger projects.</p>
+          <p>One of my main projects is Huzagram, a future platform aiming to become one of the most powerful apps in Africa and beyond. I believe in working hard, learning every day, and creating real solutions that change lives.</p>
+        </div>
       </div>
+    </section>
+  </div>
 
-      <!-- Client Websites -->
-      <div class="project-card">
-        <img src="IMG_0163.jpeg" alt="Client Websites" style="width:100%; border-radius:6px; margin-bottom:10px;">
-        <h3>Client Websites</h3>
-        <p><strong>Custom Websites for Businesses & Startups</strong></p>
-        <p>I’ve built modern, mobile-friendly websites for small businesses, freelancers, and organizations. Each design is optimized for speed, clarity, and conversion — helping clients grow their digital presence.</p>
+  <!-- === PROJECTS PAGE === -->
+  <div id="page-projects" class="page">
+    <section class="container">
+      <h2>Projects</h2>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <img src="IMG_0162.jpeg" alt="Huzagram App" style="width:100%;border-radius:6px;margin-bottom:10px;">
+          <h3>Huzagram</h3>
+          <p><strong>Everything App – Social + Business + AI</strong></p>
+          <p>Huzagram is my dream project — a next-gen “everything app” inspired by WeChat but built with AI at its core. It’s designed to connect people, empower creators, and provide smart business tools for Africa and beyond. A place to chat, create, earn, and grow — all in one app.</p>
+        </div>
+
+        <div class="project-card">
+          <img src="IMG_0163.jpeg" alt="Client Websites" style="width:100%;border-radius:6px;margin-bottom:10px;">
+          <h3>Client Websites</h3>
+          <p><strong>Custom Websites for Businesses & Startups</strong></p>
+          <p>I’ve built modern, mobile-friendly websites for small businesses, freelancers, and organizations. Each design is optimized for speed, clarity, and conversion — helping clients grow their digital presence.</p>
+        </div>
+
+        <div class="project-card">
+          <img src="IMG_0165.jpeg" alt="Creative Portfolio" style="width:100%;border-radius:6px;margin-bottom:10px;">
+          <h3>Creative Portfolio</h3>
+          <p><strong>Showcasing My Personal Brand</strong></p>
+          <p>This very portfolio is one of my favorite projects — designed and coded by me from scratch. It represents my creativity, vision, and growing journey as a developer and entrepreneur.</p>
+        </div>
+
       </div>
+    </section>
+  </div>
 
-      <!-- Creative Portfolio -->
-      <div class="project-card">
-        <img src="IMG_0165.jpeg" alt="Creative Portfolio" style="width:100%; border-radius:6px; margin-bottom:10px;">
-        <h3>Creative Portfolio</h3>
-        <p><strong>Showcasing My Personal Brand</strong></p>
-        <p>This very portfolio is one of my favorite projects — designed and coded by me from scratch. It represents my creativity, vision, and growing journey as a developer and entrepreneur.</p>
-      </div>
+  <!-- === CONTACT PAGE === -->
+  <div id="page-contact" class="page">
+    <section class="container contact-box">
+      <h2>Contact</h2>
+      <p>Want to work with me? Let’s talk!</p>
+      <p><strong>Email:</strong> huzeyfamuhammed913@gmail.com</p>
+      <p><strong>Telegram:</strong> @huzu17</p>
+      <p><strong>Phone:</strong> +251 924030430</p>
+    </section>
+  </div>
 
-    </div>
-  </section>
-
-  <!-- CONTACT SECTION -->
-  <section id="contact" class="container contact-box" data-aos="fade-up">
-    <h2>Contact</h2>
-    <p>Want to work with me? Let’s talk!</p>
-    <p><strong>Email:</strong> huzeyfamuhammed913@gmail.com</p>
-    <p><strong>Telegram:</strong> @huzu17</p>
-    <p><strong>Phone:</strong> +251 924030430</p>
-  </section>
-
-  <!-- Animation Script -->
+  <!-- JS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
+  <script>
+    AOS.init();
+
+    function navigate(page) {
+      // hide all
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // show selected
+      document.getElementById('page-' + page).classList.add('active');
+
+      // update nav highlight
+      document.querySelectorAll('.navbar ul li a').forEach(a => a.classList.remove('active'));
+      document.getElementById('link-' + page).classList.add('active');
+
+      // optional scroll top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // update url hash without reloading
+      history.pushState({}, '', '#' + page);
+    }
+
+    // handle back/forward buttons
+    window.addEventListener('popstate', () => {
+      const hash = location.hash.replace('#', '') || 'home';
+      navigate(hash);
+    });
+
+    // load correct page on refresh
+    window.addEventListener('load', () => {
+      const hash = location.hash.replace('#', '') || 'home';
+      navigate(hash);
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
