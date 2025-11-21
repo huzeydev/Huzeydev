@@ -1,210 +1,299 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HuzeyDev | Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HuzeyDev — Portfolio</title>
 
-  <!-- Google Font & Animation Library -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <!-- Fonts & AOS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 
   <style>
-    * {margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-    body {background:#0f172a;color:#cbd5e1;line-height:1.6;}
-    .container {width:90%;max-width:1000px;margin:auto;}
-
-    .navbar {
-      width:100%;
-      background:#0f172a;
-      position:fixed;
-      top:0;
-      left:0;
-      z-index:1000;
-      padding:15px 0;
-      border-bottom:1px solid #1e293b;
+    /* Reset + base */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#0b1220;
+      background:#ffffff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
     }
-    .navbar .container {
+    a{color:inherit;text-decoration:none}
+    .container{width:90%;max-width:1100px;margin:0 auto;padding:0 16px}
+
+    /* NAV */
+    .nav {
+      position:fixed;
+      left:0;right:0;top:20px;
+      z-index:1200;
       display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+    }
+    .nav-inner {
+      width:100%;
+      max-width:1100px;
+      display:flex;
+      align-items:center;
       justify-content:space-between;
+      background:rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(11,18,32,0.06);
+      padding:10px 18px;
+      border-radius:12px;
+      pointer-events:auto;
+      box-shadow: 0 6px 30px rgba(11,18,32,0.06);
+    }
+    .brand {
+      font-weight:800;
+      letter-spacing:-0.02em;
+      font-size:1.05rem;
+    }
+    nav ul{display:flex;gap:18px;align-items:center;list-style:none}
+    nav a.nav-link{
+      color:#111827;
+      font-weight:600;
+      font-size:0.95rem;
+      opacity:0.7;
+      padding:8px 10px;
+      border-radius:8px;
+    }
+    nav a.nav-link.active, nav a.nav-link:hover{
+      background:transparent;
+      color:#0ea5e9;
+      opacity:1;
+      transform:translateY(-1px);
+    }
+
+    /* Sections */
+    section{
+      padding:120px 0;
+      min-height:calc(100vh - 160px);
+      display:flex;
       align-items:center;
     }
-    .navbar .logo {color:#38bdf8;font-size:1.5rem;font-weight:600;text-decoration:none;cursor:pointer;}
-    .navbar ul {list-style:none;display:flex;gap:20px;}
-    .navbar ul li a {color:#fff;text-decoration:none;font-weight:500;cursor:pointer;}
-    .navbar ul li a:hover,.navbar ul li a.active {color:#38bdf8;}
-
-    .page {display:none;padding-top:100px;animation:fadeIn .4s ease;}
-    .page.active {display:block;}
-
-    h1,h2,h3 {color:#38bdf8;margin-bottom:20px;}
-
-    .hero-flex {display:flex;align-items:center;justify-content:space-between;gap:40px;}
-    .hero-text {flex:1;}
-    .hero-text h1 {font-size:2.8rem;margin-bottom:10px;}
-    .hero-photo img {
-      width:200px;height:200px;border-radius:50%;border:4px solid #38bdf8;object-fit:cover;
-    }
-    .btn {
-      display:inline-block;margin-top:20px;padding:12px 24px;background:#38bdf8;color:#0f172a;
-      font-weight:600;text-decoration:none;border-radius:6px;cursor:pointer;
-    }
-    .btn:hover {background:#0284c7;}
-
-    .about-flex {display:flex;align-items:center;gap:40px;margin-top:30px;}
-    .about-photo img {
-      width:150px;height:150px;border-radius:50%;border:4px solid #38bdf8;object-fit:cover;
-    }
-    .about-text {flex:1;}
-
-    .project-grid {
+    .hero { padding-top:160px; min-height:calc(100vh - 120px) }
+    .hero-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:20px;
+      grid-template-columns: 1fr 380px;
+      gap:48px;
+      align-items:center;
     }
-    .project-card {
-      background:#1e293b;padding:20px;border-radius:8px;
-      transition:transform .3s ease,box-shadow .3s ease;
-    }
-    .project-card:hover {
-      transform:translateY(-5px);
-      box-shadow:0 8px 20px rgba(56,189,248,0.2);
+    @media (max-width:940px){
+      .hero-grid { grid-template-columns: 1fr; text-align:center }
+      .hero { padding-top:120px }
     }
 
-    .contact-box {text-align:center;}
-
-    @media(max-width:768px){
-      .hero-flex,.about-flex{flex-direction:column;text-align:center;}
+    h1{
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      line-height:1.02;
+      margin-bottom:18px;
+      color:#071021;
+      font-weight:800;
     }
-
-    @keyframes fadeIn {
-      from{opacity:0;transform:translateY(10px);}
-      to{opacity:1;transform:translateY(0);}
+    h2{font-size:1.25rem;margin-bottom:10px;color:#0b1220;font-weight:700}
+    p.lead{font-size:1.05rem;color:#263248;opacity:0.9;margin-bottom:18px}
+    .cta{
+      display:inline-block;
+      margin-top:18px;
+      padding:12px 18px;
+      border-radius:10px;
+      font-weight:700;
+      color:#ffffff;
+      background:#0ea5e9;
+      transition:transform .18s ease, box-shadow .18s ease;
     }
+    .cta:hover{transform:translateY(-3px); box-shadow:0 10px 30px rgba(14,165,233,0.18)}
+
+    /* subtle card on the right */
+    .hero-card{
+      border-radius:14px;
+      padding:20px;
+      border:1px solid rgba(11,18,32,0.06);
+      background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,251,0.9));
+      box-shadow:0 10px 30px rgba(11,18,32,0.04);
+    }
+    .muted { color:#475569; font-size:0.95rem; opacity:0.95 }
+
+    /* Projects */
+    .projects-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    @media (max-width:940px){ .projects-grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:640px){ .projects-grid{grid-template-columns:1fr} }
+
+    .card{
+      padding:18px;border-radius:12px;border:1px solid rgba(11,18,32,0.06);
+      background:#fff; transition:transform .22s ease, box-shadow .22s ease;
+    }
+    .card:hover{transform:translateY(-6px); box-shadow:0 14px 40px rgba(11,18,32,0.06)}
+    .card img{width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px}
+    .card h3{font-size:1.05rem;margin-bottom:6px}
+
+    /* About */
+    .about-inner{display:flex;gap:36px;align-items:center}
+    @media (max-width:880px){ .about-inner{flex-direction:column;text-align:center} }
+    .about-bio{max-width:64ch;color:#263248}
+
+    /* Contact */
+    .contact-box{border-radius:12px;padding:24px;border:1px solid rgba(11,18,32,0.06);max-width:720px;margin:0 auto}
+    .contact-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .contact-list b{color:#0b1220}
+
+    /* Footer */
+    footer{padding:36px 0;text-align:center;color:#54607a;font-size:0.95rem}
+
+    /* small utilities */
+    .small{font-size:.92rem;color:#475569}
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="container">
-      <a class="logo" onclick="navigate('home')">HuzeyDev</a>
-      <ul>
-        <li><a id="link-home" onclick="navigate('home')" class="active">Home</a></li>
-        <li><a id="link-about" onclick="navigate('about')">About</a></li>
-        <li><a id="link-projects" onclick="navigate('projects')">Projects</a></li>
-        <li><a id="link-contact" onclick="navigate('contact')">Contact</a></li>
-      </ul>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner container">
+      <div class="brand">HuzeyDev</div>
+      <nav>
+        <ul>
+          <li><a class="nav-link" href="#home">Home</a></li>
+          <li><a class="nav-link" href="#about">About</a></li>
+          <li><a class="nav-link" href="#projects">Projects</a></li>
+          <li><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-  </nav>
-
-  <!-- === HOME PAGE === -->
-  <div id="page-home" class="page active">
-    <section class="container hero-flex">
-      <div class="hero-text">
-        <h1>Huzeyfa (HuzeyDev)</h1>
-        <p>Web Developer | Freelancer | Builder of Huzagram</p>
-        <p>I build modern websites & apps to help businesses grow online.</p>
-        <a class="btn" onclick="navigate('contact')">Freelance Me</a>
-      </div>
-      <div class="hero-photo">
-        <!-- optional photo -->
-      </div>
-    </section>
   </div>
 
-  <!-- === ABOUT PAGE === -->
-  <div id="page-about" class="page">
-    <section class="container">
-      <h2>About Me</h2>
-      <div class="about-flex">
-        <div class="about-photo">
-          <img src="profile.jpg" alt="Huzeyfa">
+  <!-- HERO -->
+  <main>
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div data-aos="fade-up">
+          <h1>Hi — I’m Huzeyfa. I build products & websites.</h1>
+          <p class="lead">Web developer · Freelancer · Founder of Huzagram. I design and build web apps that help businesses and creators grow online. I focus on fast, accessible, and practical solutions.</p>
+          <a class="cta" href="#contact">Freelance me</a>
+
+          <p class="small" style="margin-top:18px;color:#6b7280">
+            Based in Ethiopia · Available for remote work
+          </p>
         </div>
-        <div class="about-text">
-          <h3>About me</h3>
-          <p>I’m Huzeyfa, also known as HuzeyDev, a passionate young web developer and future tech entrepreneur .</p>
-          <p>My journey started with curiosity and a big dream – to create apps and platforms that truly help people. I began by learning HTML, CSS, and JavaScript, then moved on to bigger projects.</p>
-          <p>One of my main projects is Huzagram, a future platform aiming to become one of the most powerful apps in Africa and beyond. I believe in working hard, learning every day, and creating real solutions that change lives.</p>
+
+        <aside class="hero-card" data-aos="fade-left" data-aos-delay="80">
+          <div style="font-weight:700;margin-bottom:8px">Quick facts</div>
+          <div class="muted">Everything app project: <b>Huzagram</b></div>
+          <div class="muted" style="margin-top:8px">Services: Web apps, UI/UX, Freelance consulting</div>
+          <div style="margin-top:14px"><a href="#projects" style="font-weight:700;color:#0ea5e9">View projects →</a></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-label="About">
+      <div class="container" data-aos="fade-up">
+        <div class="about-inner">
+          <div class="about-text">
+            <h2>About</h2>
+            <p class="about-bio">
+              I’m Huzeyfa (HuzeyDev), a web developer and future tech entrepreneur. My journey began with curiosity — learning HTML, CSS and JavaScript — and grew into building real products.
+              One of my main projects is <strong>Huzagram</strong>, an "everything app" built with AI at the core to connect people, creators, and businesses across Africa and beyond.
+            </p>
+            <p style="margin-top:12px" class="small">I believe in simple, useful interfaces and shipping practical solutions fast.</p>
+          </div>
+
+          <!-- optional circle or avatar placeholder -->
+          <div style="margin-left:auto;min-width:180px;display:flex;align-items:center;justify-content:center">
+            <div style="width:140px;height:140px;border-radius:50%;border:8px solid rgba(14,165,233,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;color:#0ea5e9">
+              HZ
+            </div>
+          </div>
         </div>
       </div>
     </section>
-  </div>
 
-  <!-- === PROJECTS PAGE === -->
-  <div id="page-projects" class="page">
-    <section class="container">
-      <h2>Projects</h2>
-      <div class="project-grid">
+    <!-- PROJECTS -->
+    <section id="projects" aria-label="Projects">
+      <div class="container" data-aos="fade-up">
+        <h2>Projects</h2>
+        <p class="small" style="margin-bottom:14px">Selected work & ideas</p>
 
-        <div class="project-card">
-          <img src="IMG_0162.jpeg" alt="Huzagram App" style="width:100%;border-radius:6px;margin-bottom:10px;">
-          <h3>Huzagram</h3>
-          <p><strong>Everything App – Social + Business + AI</strong></p>
-          <p>Huzagram is my dream project — a next-gen “everything app” inspired by WeChat but built with AI at its core. It’s designed to connect people, empower creators, and provide smart business tools for Africa and beyond. A place to chat, create, earn, and grow — all in one app.</p>
+        <div class="projects-grid">
+          <div class="card" data-aos="fade-up" data-aos-delay="40">
+            <img src="IMG_0162.jpeg" alt="Huzagram preview" onerror="this.style.display='none'">
+            <h3>Huzagram</h3>
+            <p class="small">Everything App — Social + Business + AI. A WeChat-inspired platform with AI-first features to connect people, creators, and businesses across Africa.</p>
+          </div>
+
+          <div class="card" data-aos="fade-up" data-aos-delay="80">
+            <img src="IMG_0163.jpeg" alt="Client websites" onerror="this.style.display='none'">
+            <h3>Client Websites</h3>
+            <p class="small">Modern, responsive websites for small businesses and startups — optimized for speed, UX and conversions.</p>
+          </div>
+
+          <div class="card" data-aos="fade-up" data-aos-delay="120">
+            <img src="IMG_0165.jpeg" alt="Portfolio" onerror="this.style.display='none'">
+            <h3>Creative Portfolio</h3>
+            <p class="small">This portfolio — designed and built from scratch to showcase my work and journey as a developer and founder.</p>
+          </div>
         </div>
-
-        <div class="project-card">
-          <img src="IMG_0163.jpeg" alt="Client Websites" style="width:100%;border-radius:6px;margin-bottom:10px;">
-          <h3>Client Websites</h3>
-          <p><strong>Custom Websites for Businesses & Startups</strong></p>
-          <p>I’ve built modern, mobile-friendly websites for small businesses, freelancers, and organizations. Each design is optimized for speed, clarity, and conversion — helping clients grow their digital presence.</p>
-        </div>
-
-        <div class="project-card">
-          <img src="IMG_0165.jpeg" alt="Creative Portfolio" style="width:100%;border-radius:6px;margin-bottom:10px;">
-          <h3>Creative Portfolio</h3>
-          <p><strong>Showcasing My Personal Brand</strong></p>
-          <p>This very portfolio is one of my favorite projects — designed and coded by me from scratch. It represents my creativity, vision, and growing journey as a developer and entrepreneur.</p>
-        </div>
-
       </div>
     </section>
-  </div>
 
-  <!-- === CONTACT PAGE === -->
-  <div id="page-contact" class="page">
-    <section class="container contact-box">
-      <h2>Contact</h2>
-      <p>Want to work with me? Let’s talk!</p>
-      <p><strong>Email:</strong> huzeyfamuhammed913@gmail.com</p>
-      <p><strong>Telegram:</strong> @huzu17</p>
-      <p><strong>Phone:</strong> +251 924030430</p>
+    <!-- CONTACT -->
+    <section id="contact" aria-label="Contact">
+      <div class="container" data-aos="fade-up">
+        <h2>Contact</h2>
+        <div class="contact-box">
+          <p class="small">Want to work together or ask about Huzagram? Reach out — I reply quickly.</p>
+
+          <div class="contact-list" style="margin-top:14px">
+            <div><b>Email:</b> huzeyfamuhammed913@gmail.com</div>
+            <div><b>Telegram:</b> @huzu17</div>
+            <div><b>Phone:</b> +251 924030430</div>
+          </div>
+
+          <div style="margin-top:18px">
+            <a class="cta" href="mailto:huzeyfamuhammed913@gmail.com">Email me</a>
+          </div>
+        </div>
+      </div>
     </section>
-  </div>
+  </main>
 
-  <!-- JS -->
+  <footer>
+    <div class="container small">© <span id="year"></span> HuzeyDev — Built with ❤️</div>
+  </footer>
+
+  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init();
+    AOS.init({ duration: 700, once: true, easing: 'ease-out-cubic' });
 
-    function navigate(page) {
-      // hide all
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      // show selected
-      document.getElementById('page-' + page).classList.add('active');
-
-      // update nav highlight
-      document.querySelectorAll('.navbar ul li a').forEach(a => a.classList.remove('active'));
-      document.getElementById('link-' + page).classList.add('active');
-
-      // optional scroll top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      // update url hash without reloading
-      history.pushState({}, '', '#' + page);
+    // scroll spy: highlight nav links based on section in view
+    const navLinks = document.querySelectorAll('a.nav-link');
+    const sections = Array.from(document.querySelectorAll('main section'));
+    function setActiveLink(){
+      const y = window.scrollY + (window.innerHeight * 0.28);
+      let current = sections[0].id;
+      for (const s of sections){
+        const rect = s.getBoundingClientRect();
+        const top = window.scrollY + rect.top;
+        if (y >= top) current = s.id;
+      }
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+current));
     }
+    window.addEventListener('scroll', setActiveLink, {passive:true});
+    window.addEventListener('load', () => { setActiveLink(); document.getElementById('year').textContent = new Date().getFullYear(); });
 
-    // handle back/forward buttons
-    window.addEventListener('popstate', () => {
-      const hash = location.hash.replace('#', '') || 'home';
-      navigate(hash);
-    });
-
-    // load correct page on refresh
-    window.addEventListener('load', () => {
-      const hash = location.hash.replace('#', '') || 'home';
-      navigate(hash);
-    });
+    // close mobile keyboard behavior: ensure small offset on hash links
+    if (location.hash) {
+      setTimeout(()=>window.scrollBy(0,-12), 50);
+    }
   </script>
 </body>
 </html>
-
