@@ -2,370 +2,339 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Huzeyfa | Version 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huzeyfa | Built From Pressure</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
-  <script src="https://unpkg.com/framer-motion/dist/framer-motion.js"></script>
-
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      scroll-behavior:smooth;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
     }
 
-    body{
-      background:#05070d;
-      color:white;
-      overflow-x:hidden;
-      font-family:Inter, sans-serif;
+    body {
+      background: #050505;
+      color: white;
+      overflow-x: hidden;
+      font-family: "Inter", sans-serif;
     }
 
-    canvas{
-      position:fixed;
-      top:0;
-      left:0;
-      z-index:-2;
+    .grain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 9999;
     }
 
-    .noise{
-      position:fixed;
-      inset:0;
-      background-image:url("https://grainy-gradients.vercel.app/noise.svg");
-      opacity:.05;
-      z-index:-1;
-      pointer-events:none;
+    .hero-bg {
+      background-image:
+        linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.92)),
+        url('profile.jpg');
+      background-size: cover;
+      background-position: center;
+      animation: zoom 18s ease-in-out infinite alternate;
     }
 
-    .glow{
-      box-shadow:
-      0 0 25px rgba(255,255,255,.08),
-      0 0 60px rgba(80,120,255,.12);
-    }
-
-    .glass{
-      background:rgba(255,255,255,.05);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,.08);
-    }
-
-    .hero-gradient{
-      background:
-      radial-gradient(circle at top left, rgba(60,80,255,.18), transparent 35%),
-      radial-gradient(circle at bottom right, rgba(255,255,255,.08), transparent 30%);
-      animation:moveBg 14s ease infinite alternate;
-    }
-
-    @keyframes moveBg{
-      from{
-        background-position:0 0;
+    @keyframes zoom {
+      from {
+        transform: scale(1);
       }
-      to{
-        background-position:100px 60px;
+      to {
+        transform: scale(1.08);
       }
     }
 
-    .floating{
-      animation:float 5s ease-in-out infinite;
+    .glass {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 0 40px rgba(255,255,255,0.05);
     }
 
-    @keyframes float{
-      0%,100%{
-        transform:translateY(0px);
+    .glow {
+      box-shadow: 0 0 30px rgba(120,120,255,0.25);
+    }
+
+    .section-fade {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1s ease;
+    }
+
+    .section-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(90,120,255,0.15), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      mix-blend-mode: screen;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      animation: float 12s infinite linear;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(0px);
+        opacity: 0;
       }
-      50%{
-        transform:translateY(-12px);
+      20% {
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100vh);
+        opacity: 0;
       }
     }
 
-    .fade-up{
-      opacity:0;
-      transform:translateY(40px);
-      transition:1s ease;
+    .quote {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -1px;
     }
 
-    .fade-up.visible{
-      opacity:1;
-      transform:translateY(0);
-    }
-
-    .mouse-light{
-      width:300px;
-      height:300px;
-      position:fixed;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(120,150,255,.16), transparent 70%);
-      pointer-events:none;
-      transform:translate(-50%,-50%);
-      z-index:-1;
-    }
-
-    .timeline-line{
-      width:2px;
-      background:linear-gradient(to bottom, transparent, #4f6bff, transparent);
-    }
-
-    .loader{
-      position:fixed;
-      inset:0;
-      background:#05070d;
-      z-index:9999;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      transition:1s;
-    }
-
-    .loader.hidden{
-      opacity:0;
-      pointer-events:none;
-    }
-
-    .star{
-      position:absolute;
-      background:white;
-      border-radius:50%;
-      opacity:.7;
-      animation:twinkle 4s infinite alternate;
-    }
-
-    @keyframes twinkle{
-      from{
-        opacity:.2;
-      }
-      to{
-        opacity:1;
-      }
+    .vignette::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent 45%, rgba(0,0,0,0.85));
+      pointer-events: none;
     }
   </style>
 </head>
-<body>
+<body class="grain">
 
-<div class="loader" id="loader">
-  <div class="text-center">
-    <h1 class="text-3xl font-light tracking-[6px] text-white/90">
-      Initializing thoughts...
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<section class="relative h-screen overflow-hidden flex items-center justify-center text-center">
+  <div class="hero-bg absolute inset-0 vignette"></div>
+
+  <div id="particles"></div>
+
+  <div class="relative z-10 px-6 max-w-5xl">
+    <p class="uppercase tracking-[8px] text-gray-400 mb-4">
+      Ethiopia • AI • Discipline • Future
+    </p>
+
+    <h1 class="text-5xl md:text-8xl font-black leading-tight mb-6">
+      Built from pressure.
     </h1>
 
-    <p class="mt-4 text-white/40">
-      Preparing version 1...
+    <p class="text-gray-300 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+      Huzeyfa is a student from Ethiopia focused on AI, technology,
+      discipline, and building a future bigger than his current reality.
+      While others sleep, he studies, researches, builds, and prepares
+      for a life he refuses to leave unfinished.
     </p>
-  </div>
-</div>
 
-<div class="noise"></div>
-<div class="mouse-light" id="mouseLight"></div>
+    <div class="mt-10 flex flex-wrap gap-5 justify-center">
+      <a href="#about"
+         class="glass glow px-8 py-4 rounded-full hover:scale-105 transition duration-500">
+        Enter the Journey
+      </a>
 
-<section class="min-h-screen relative overflow-hidden hero-gradient flex items-center justify-center px-6">
-
-  <div id="stars"></div>
-
-  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-
-    <div class="fade-up">
-      <p class="uppercase tracking-[6px] text-white/40 mb-6">
-        Huzeyfa • Ethiopia
-      </p>
-
-      <h1 class="text-5xl md:text-7xl leading-tight font-light">
-        Built from
-        <span class="text-white/60">
-          pressure.
-        </span>
-      </h1>
-
-      <p class="mt-8 text-white/60 leading-8 text-lg max-w-xl">
-        Huzeyfa is a student from Ethiopia focused on AI, technology,
-        discipline, and building a future larger than his current reality.
-        While others sleep, he studies, researches, builds, and prepares
-        for a life he has not reached yet.
-      </p>
-
-      <div class="flex gap-5 mt-10 flex-wrap">
-        <button class="glass glow px-8 py-4 rounded-full hover:scale-105 transition">
-          Enter My World
-        </button>
-
-        <button class="border border-white/10 px-8 py-4 rounded-full hover:bg-white/5 transition">
-          See The Journey
-        </button>
-      </div>
+      <a href="#contact"
+         class="border border-white/20 px-8 py-4 rounded-full hover:bg-white hover:text-black transition duration-500">
+        Contact
+      </a>
     </div>
-
-    <div class="flex justify-center fade-up">
-      <div class="relative floating">
-
-        <div class="absolute inset-0 rounded-full blur-3xl bg-blue-500/20"></div>
-
-        <img
-          src="profile.jpg"
-          class="relative w-[320px] h-[320px] md:w-[430px] md:h-[430px] object-cover rounded-full border border-white/20 glow"
-        />
-      </div>
-    </div>
-
   </div>
 </section>
 
-<section class="py-32 px-6">
-  <div class="max-w-5xl mx-auto">
+<section id="about" class="section-fade min-h-screen flex items-center py-24 px-6">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
-    <div class="glass rounded-3xl p-10 md:p-16 fade-up">
+    <div>
+      <img src="profile.jpg"
+           class="rounded-3xl shadow-2xl opacity-90 hover:scale-[1.02] transition duration-700" />
+    </div>
 
-      <p class="uppercase tracking-[5px] text-white/40 mb-8">
+    <div>
+      <p class="uppercase text-sm tracking-[6px] text-gray-500 mb-5">
         About
       </p>
 
-      <h2 class="text-4xl md:text-5xl font-light leading-tight max-w-3xl">
-        A student carrying ambitions larger than the room around him.
+      <h2 class="text-4xl md:text-6xl font-black mb-8 leading-tight">
+        A quiet genius in progress.
       </h2>
 
-      <p class="mt-10 text-white/60 leading-9 text-lg">
-        Studying at Haile Manas Academy while chasing high grades,
-        Huzeyfa spends nights researching artificial intelligence,
-        computer science, and the systems shaping the future.
-        Discipline became less of a habit and more of a survival tool.
-        While many people his age are still searching for direction,
-        he is already thinking years ahead.
-        Quietly rebuilding mindset, focus, and identity,
-        one late night at a time.
+      <p class="text-gray-300 text-lg leading-loose">
+        Studying at Haile Manas Academy while carrying ambitions larger than his age,
+        Huzeyfa spends countless late nights researching AI, technology, and self-development.
+        Beneath the pressure of academics and expectations exists a mind obsessed with growth.
+        
+        He believes discipline can rewrite circumstance.
+        He believes knowledge can become escape velocity.
+        
+        While many move with noise, he builds in silence.
+        Researching. Learning. Rebuilding his mindset.
+        Preparing for a future that currently exists only inside his imagination.
       </p>
+    </div>
+  </div>
+</section>
+
+<section class="section-fade py-32 px-6 relative">
+  <div class="max-w-5xl mx-auto relative">
+
+    <div class="timeline-line hidden md:block"></div>
+
+    <h2 class="text-center text-5xl font-black mb-20">
+      Timeline of Becoming
+    </h2>
+
+    <div class="space-y-16">
+
+      <div class="glass rounded-3xl p-8 glow hover:-translate-y-2 transition duration-500">
+        <h3 class="text-2xl font-bold mb-3">Curiosity</h3>
+        <p class="text-gray-300">
+          Discovering technology and realizing computers were more than machines.
+          They were gateways.
+        </p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 glow hover:-translate-y-2 transition duration-500">
+        <h3 class="text-2xl font-bold mb-3">AI Obsession</h3>
+        <p class="text-gray-300">
+          Diving into artificial intelligence, research systems, future technologies,
+          and understanding how intelligence itself could be engineered.
+        </p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 glow hover:-translate-y-2 transition duration-500">
+        <h3 class="text-2xl font-bold mb-3">Discipline Era</h3>
+        <p class="text-gray-300">
+          Learning that motivation fades but systems survive.
+          Building consistency under pressure.
+        </p>
+      </div>
+
+      <div class="glass rounded-3xl p-8 glow hover:-translate-y-2 transition duration-500">
+        <h3 class="text-2xl font-bold mb-3">Future Vision</h3>
+        <p class="text-gray-300">
+          Planning a future centered around impactful technology,
+          intelligence systems, and meaningful innovation.
+        </p>
+      </div>
 
     </div>
   </div>
 </section>
 
-<section class="py-32 px-6 relative">
+<section class="section-fade py-28 px-6 bg-black/40">
+  <div class="max-w-7xl mx-auto">
 
-  <div class="absolute left-1/2 top-0 h-full timeline-line"></div>
-
-  <div class="max-w-5xl mx-auto space-y-20 relative">
-
-    <div class="glass rounded-3xl p-8 fade-up hover:-translate-y-2 transition glow">
-      <h3 class="text-2xl mb-3">Curiosity About Technology</h3>
-      <p class="text-white/60">
-        The beginning was simple curiosity.
-        Questions turned into obsession.
-      </p>
-    </div>
-
-    <div class="glass rounded-3xl p-8 fade-up hover:-translate-y-2 transition glow">
-      <h3 class="text-2xl mb-3">Discovering AI</h3>
-      <p class="text-white/60">
-        Artificial intelligence felt like seeing the future leaking into the present.
-      </p>
-    </div>
-
-    <div class="glass rounded-3xl p-8 fade-up hover:-translate-y-2 transition glow">
-      <h3 class="text-2xl mb-3">School Pressure</h3>
-      <p class="text-white/60">
-        Grades, expectations, and responsibility started feeling heavier than age.
-      </p>
-    </div>
-
-    <div class="glass rounded-3xl p-8 fade-up hover:-translate-y-2 transition glow">
-      <h3 class="text-2xl mb-3">Learning Discipline</h3>
-      <p class="text-white/60">
-        Motivation fades. Discipline stays.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-<section class="py-32 px-6">
-  <div class="max-w-6xl mx-auto">
-
-    <h2 class="text-5xl font-light mb-16 fade-up">
+    <h2 class="text-center text-5xl font-black mb-16">
       Skills
     </h2>
 
     <div class="grid md:grid-cols-4 gap-6">
 
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Artificial Intelligence</h3>
+      <div class="glass p-8 rounded-3xl hover:scale-105 transition duration-500 glow">
+        <h3 class="text-xl font-bold mb-3">Artificial Intelligence</h3>
+        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+          <div class="h-full bg-white w-[85%]"></div>
+        </div>
       </div>
 
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Research</h3>
+      <div class="glass p-8 rounded-3xl hover:scale-105 transition duration-500 glow">
+        <h3 class="text-xl font-bold mb-3">Research</h3>
+        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+          <div class="h-full bg-white w-[90%]"></div>
+        </div>
       </div>
 
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Critical Thinking</h3>
+      <div class="glass p-8 rounded-3xl hover:scale-105 transition duration-500 glow">
+        <h3 class="text-xl font-bold mb-3">Web Development</h3>
+        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+          <div class="h-full bg-white w-[80%]"></div>
+        </div>
       </div>
 
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Discipline</h3>
-      </div>
-
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Problem Solving</h3>
-      </div>
-
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Fast Learning</h3>
-      </div>
-
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Strategic Thinking</h3>
-      </div>
-
-      <div class="glass rounded-3xl p-8 glow fade-up">
-        <h3 class="text-xl">Web Development</h3>
+      <div class="glass p-8 rounded-3xl hover:scale-105 transition duration-500 glow">
+        <h3 class="text-xl font-bold mb-3">Strategic Thinking</h3>
+        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+          <div class="h-full bg-white w-[92%]"></div>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
 
-<section class="min-h-screen flex items-center justify-center text-center px-6 relative overflow-hidden">
+<section class="section-fade min-h-screen flex items-center justify-center text-center px-6">
+  <div class="max-w-5xl">
 
-  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent"></div>
+    <p class="quote">
+      “Some people inherit opportunity.
+      Others build themselves until opportunity notices.”
+    </p>
 
-  <div class="max-w-4xl fade-up">
-    <h2 class="text-4xl md:text-6xl font-light leading-tight">
-      “I am not competing with people.
-      <br/>
-      I am competing with the version of me
-      that could exist.”
-    </h2>
+    <p class="mt-10 text-gray-500 uppercase tracking-[8px]">
+      version 1
+    </p>
   </div>
-
 </section>
 
-<section class="py-32 px-6">
-  <div class="max-w-6xl mx-auto">
+<section class="section-fade py-28 px-6">
+  <div class="max-w-7xl mx-auto">
 
-    <h2 class="text-5xl font-light mb-16 fade-up">
-      Future Projects
+    <h2 class="text-center text-5xl font-black mb-20">
+      Projects
     </h2>
 
     <div class="grid md:grid-cols-3 gap-8">
 
-      <div class="glass rounded-3xl p-8 glow floating fade-up">
-        <h3 class="text-2xl mb-4">AI Assistant Systems</h3>
-        <p class="text-white/60">
-          Building intelligent systems designed to amplify human capability.
+      <div class="glass rounded-3xl p-8 hover:-translate-y-3 transition duration-500 glow">
+        <h3 class="text-2xl font-bold mb-4">AI Assistant Systems</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Experimental intelligence systems focused on productivity,
+          automation, and learning.
         </p>
       </div>
 
-      <div class="glass rounded-3xl p-8 glow floating fade-up">
-        <h3 class="text-2xl mb-4">Research Projects</h3>
-        <p class="text-white/60">
-          Exploring future technologies through deep research and experimentation.
+      <div class="glass rounded-3xl p-8 hover:-translate-y-3 transition duration-500 glow">
+        <h3 class="text-2xl font-bold mb-4">Future Startup Concepts</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Ideas exploring education technology, digital systems,
+          and scalable innovation.
         </p>
       </div>
 
-      <div class="glass rounded-3xl p-8 glow floating fade-up">
-        <h3 class="text-2xl mb-4">Startup Concepts</h3>
-        <p class="text-white/60">
-          Turning ideas into systems that solve meaningful problems.
+      <div class="glass rounded-3xl p-8 hover:-translate-y-3 transition duration-500 glow">
+        <h3 class="text-2xl font-bold mb-4">Research Projects</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Deep explorations into technology, discipline,
+          AI systems, and human performance.
         </p>
       </div>
 
@@ -373,94 +342,87 @@
   </div>
 </section>
 
-<section class="py-32 px-6">
-  <div class="max-w-3xl mx-auto glass rounded-3xl p-12 text-center fade-up">
+<section id="contact" class="section-fade py-32 px-6">
+  <div class="max-w-4xl mx-auto glass rounded-[40px] p-12 text-center glow">
 
-    <h2 class="text-4xl font-light mb-6">
-      Maybe this is the beginning
-      of something important.
-    </h2>
-
-    <p class="text-white/50 mb-10">
-      Some connections shape the future before they even realize it.
+    <p class="uppercase tracking-[8px] text-gray-500 mb-6">
+      Contact
     </p>
 
-    <form class="space-y-6">
+    <h2 class="text-5xl font-black mb-6">
+      Maybe this is the beginning of something important.
+    </h2>
 
-      <input
-        type="text"
-        placeholder="Name"
-        class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none"
-      />
+    <p class="text-gray-300 mb-12 max-w-2xl mx-auto">
+      Reach out for collaborations, ideas, conversations,
+      or future technology projects.
+    </p>
 
-      <input
-        type="email"
-        placeholder="Email"
-        class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none"
-      />
+    <form action="mailto:beyhuzu@gmail.com" method="post" enctype="text/plain"
+          class="space-y-6 max-w-2xl mx-auto">
 
-      <textarea
-        placeholder="Message"
-        rows="5"
-        class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none"
-      ></textarea>
+      <input type="text" placeholder="Your Name"
+             class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white/40 transition" />
 
-      <button
-        class="glass glow px-8 py-4 rounded-full hover:scale-105 transition"
-      >
+      <input type="email" placeholder="Your Email"
+             class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white/40 transition" />
+
+      <textarea placeholder="Your Message"
+                rows="5"
+                class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white/40 transition"></textarea>
+
+      <button class="glass px-10 py-4 rounded-full hover:scale-105 transition duration-500 glow">
         Send Message
       </button>
-
     </form>
 
+    <div class="mt-12 text-gray-400 space-y-2">
+      <p>Email: beyhuzu@gmail.com</p>
+      <p>Phone: 0907076988</p>
+    </div>
   </div>
 </section>
 
-<footer class="py-12 text-center text-white/40 border-t border-white/5">
-  This is only version 1 of me.
+<footer class="text-center py-12 text-gray-500 border-t border-white/5">
+  <p>
+    “This is only version 1 of me.”
+  </p>
 </footer>
 
 <script>
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
+  const glow = document.getElementById('cursorGlow');
+
+  window.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
       if(entry.isIntersecting){
-        entry.target.classList.add("visible");
+        entry.target.classList.add('visible');
       }
-    });
-  });
+    })
+  })
 
-  document.querySelectorAll(".fade-up").forEach((el)=>{
-    observer.observe(el);
-  });
+  document.querySelectorAll('.section-fade').forEach(section => {
+    observer.observe(section)
+  })
 
-  const mouseLight = document.getElementById("mouseLight");
+  const particles = document.getElementById('particles');
 
-  document.addEventListener("mousemove",(e)=>{
-    mouseLight.style.left = e.clientX + "px";
-    mouseLight.style.top = e.clientY + "px";
-  });
+  for(let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
 
-  setTimeout(()=>{
-    document.getElementById("loader").classList.add("hidden");
-  },2500);
+    particle.style.width = Math.random() * 4 + 'px';
+    particle.style.height = particle.style.width;
+    particle.style.left = Math.random() * 100 + 'vw';
+    particle.style.bottom = '-20px';
+    particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
+    particle.style.animationDelay = Math.random() * 5 + 's';
 
-  const starsContainer = document.getElementById("stars");
-
-  for(let i=0;i<80;i++){
-    const star = document.createElement("div");
-
-    star.classList.add("star");
-
-    star.style.width = Math.random()*3+"px";
-    star.style.height = star.style.width;
-
-    star.style.left = Math.random()*100+"%";
-    star.style.top = Math.random()*100+"%";
-
-    star.style.animationDuration =
-      (Math.random()*5+2)+"s";
-
-    starsContainer.appendChild(star);
+    particles.appendChild(particle);
   }
 </script>
 
